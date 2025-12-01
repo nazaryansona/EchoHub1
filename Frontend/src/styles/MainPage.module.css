@@ -1,0 +1,39 @@
+.main {
+  grid-area: main;
+  background-color: #1e2e3d;
+}
+
+.transpCircle {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: #4d5e70;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  margin: -54px 0 0 10%;
+}
+
+.box1,
+.box2 {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+@media screen and (max-width: 768px) {
+  .box1,
+  .box2 {
+    flex: 100%;
+    max-width: 100%;
+  }
+}

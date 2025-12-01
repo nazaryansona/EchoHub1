@@ -1,0 +1,24 @@
+.card {
+  width: 100%;
+  background-color: #101e2c;
+  border-radius: 15px;
+  border: none;
+  margin: 10px auto;
+}
+
+.commentButton {
+  cursor: pointer;
+  width: 40%;
+  background-color: #101e2c;
+  border-radius: 15px;
+  border: none;
+}
+
+.commentButton:hover {
+  background-color: #293e51;
+}
+
+.emoji:hover {
+  cursor: pointer;
+  transform: scale(1.12);
+}

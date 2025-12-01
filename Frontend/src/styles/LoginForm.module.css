@@ -1,0 +1,9 @@
+.link {
+  color: #6264da;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.profileContainer {
+  display: flex;
+}
