@@ -46,6 +46,7 @@
   width: 100%;
   height: 6vh;
   border-radius: 15px 15px 0 0;
+  position: relative;
 }
 
 .addPost {
@@ -115,4 +116,13 @@
   border-radius: 20px;
   width: 100%;
   margin: 10px auto;
+}
+
+.iconBackArrow {
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  position: absolute;
+  top: 16%;
+  left: 3%;
 }

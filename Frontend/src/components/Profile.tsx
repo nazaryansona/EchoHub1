@@ -7,8 +7,12 @@ import { FaPlus } from "react-icons/fa6";
 import style from "../styles/Profile.module.css";
 import { Route, Routes, Link, Outlet } from "react-router-dom";
 import CreatePost from "./CreatePost";
+import { usePosts } from "@/hooks/usePosts";
 
-const Profile = () => {
+const Profile = ({ search }: { search: string }) => {
+  const userId = "1"; // example logged-in user id
+  const { posts } = usePosts({ userId, search });
+
   return (
     <Box
       bgColor={"#101e2c"}
@@ -57,7 +61,9 @@ const Profile = () => {
                   </Link>
                 </Box>
                 <Box className={style.postContainer}>
-                  <Post />
+                  {posts.map((p) => (
+                    <Post key={p.id} text={p.content} img={p.img} />
+                  ))}
                 </Box>
               </>
             }

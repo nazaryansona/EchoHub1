@@ -1,20 +1,54 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+import express from "express";
+import session from "express-session";
+import MySQLStoreFactory from "express-mysql-session";
+import cors from "cors";
+import dotenv from "dotenv";
+import { db } from "./db/connection";
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+import authRoutes from "./routes/auth.routes";
+import postsRoutes from "./routes/posts.routes";
+import commentsRoutes from "./routes/comments.routes";
+import reactionsRoutes from "./routes/reactions.routes";
+import notificationsRoutes from "./routes/notifications.routes";
 
-var app = express();
+dotenv.config();
 
-app.use(logger("dev"));
+const MySQLStore = MySQLStoreFactory(session);
+
+const store = new MySQLStore({}, db as any);
+
+const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+      httpOnly: true,
+    },
+  })
+);
 
-module.exports = app;
+// Public folder for uploaded images
+app.use("/uploads", express.static("uploads"));
+
+app.use("/auth", authRoutes);
+app.use("/posts", postsRoutes);
+app.use("/comments", commentsRoutes);
+app.use("/reactions", reactionsRoutes);
+app.use("/notifications", notificationsRoutes);
+
+export default app;

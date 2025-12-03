@@ -5,16 +5,17 @@ import style from "./styles/App.module.css";
 import { Grid } from "@chakra-ui/react";
 import Header from "./pages/Header";
 import MainPage from "./pages/MainPage";
+import { useState } from "react";
 
 function App() {
-  //const [count, setCount] = useState(0);
+  const [search, setSearch] = useState("");
 
   return (
     <>
       <Router>
         <Grid className={style.grid}>
-          <Header />
-          <MainPage />
+          <Header onSearch={setSearch} />
+          <MainPage search={search} />
         </Grid>
       </Router>
     </>

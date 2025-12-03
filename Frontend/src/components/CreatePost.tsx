@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import {} from "@chakra-ui/react";
 import { HiUpload } from "react-icons/hi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import style from "../styles/Profile.module.css";
@@ -41,10 +41,16 @@ const CreatePost = () => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
       <Box className={style.subtleBox}>
-        <IoMdArrowRoundBack color="white" size={"xs"} />
+        <IoMdArrowRoundBack
+          onClick={() => navigate(-1)}
+          className={style.iconBackArrow}
+        />
+
         <Text color={"white"} fontSize={"md"} marginTop={"8px"}>
           {isAddingPost ? "New Post" : "My Posts"}
         </Text>

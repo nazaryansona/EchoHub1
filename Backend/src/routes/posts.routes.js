@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+import { Router } from "express";
+import { upload } from "../utils/upload";
+import { createPost } from "../controllers/posts.controller";
+import { requireLogin } from "../middleware/auth";
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+const router = Router();
 
-module.exports = router;
+router.post("/", requireLogin, upload.single("image"), createPost);
+
+export default router;

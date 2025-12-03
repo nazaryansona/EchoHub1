@@ -11,7 +11,7 @@ import SearchBar from "../components/SearchBar";
 import NotifModal from "../components/NotifModal";
 import { useState } from "react";
 
-const Header = () => {
+const Header = ({ onSearch }: { onSearch: (value: string) => void }) => {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const hideNavRoutes = ["/feed", "/profile", "/profile/add-post"];
@@ -29,7 +29,7 @@ const Header = () => {
         </div>
         {hideNav && (
           <div className={style.iconContainer}>
-            <SearchBar />
+            <SearchBar onSearch={onSearch} />
             <IoIosNotifications className={style.icon} onClick={handleClick} />
             <Link to="/profile/add-post">
               <FaPlus className={style.icon} />

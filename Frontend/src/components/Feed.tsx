@@ -1,8 +1,11 @@
 import { Box } from "@chakra-ui/react";
 import Post from "./Post";
+import { usePosts } from "@/hooks/usePosts";
 import style from "../styles/Feed.module.css";
 
-const Feed = () => {
+const Feed = ({ search }: { search: string }) => {
+  const { posts } = usePosts({ search });
+
   return (
     <>
       <Box
@@ -16,27 +19,9 @@ const Feed = () => {
         overflowY={"auto"}
       >
         <Box width={"80%"} margin={"auto"}>
-          <Post
-            img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-MKjqBrUbY2XxX-8o4J0NVXb2N3jOmf5rNg&s"
-            text={
-              "post 1 post 1 v post 1 post 1 post 1 post 1 post 1 post 1 post 1 post 1 "
-            }
-          />
-          <Post
-            text={
-              "post 2 post 2 post 2 post 2 post 2 post 2 post 2 post 2 post 2 post 2 "
-            }
-          />
-          <Post
-            text={
-              "post 3 post 3 post 3 post 3 post 3 post 3 post 3 post 3 post 3 post 3 "
-            }
-          />
-          <Post
-            text={
-              "post 4 post 4 post 4 post 4 post 4 post 4 post 4 post 4 post 4 post 4 "
-            }
-          />
+          {posts.map((p) => (
+            <Post key={p.id} text={p.content} img={p.img} />
+          ))}
         </Box>
       </Box>
     </>
