@@ -1,13 +1,10 @@
-import { Box, Image } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import { Box } from "@chakra-ui/react";
 
 interface ProfilePicProps {
-  color: string;
-  emoji: string;
-  className?: string;
+  color: string; // background color
+  emoji: string; // path to emoji image
   width?: string;
   height?: string;
-  margin?: string;
   emojiWidth?: string;
   emojiHeight?: string;
   padding?: string;
@@ -16,30 +13,33 @@ interface ProfilePicProps {
 const ProfilePic = ({
   color,
   emoji,
-  width,
-  height,
-  margin,
-  emojiWidth,
-  emojiHeight,
-  padding,
+  width = "100px",
+  height = "100px",
+  emojiWidth = "50px",
+  emojiHeight = "50px",
+  padding = "15px",
 }: ProfilePicProps) => {
   return (
     <Box
-      width={width || "70px"}
-      height={height || "70px"}
+      w={width}
+      h={height}
+      bgColor={color}
       borderRadius="50%"
-      padding={padding || "10px"}
-      backgroundColor={color}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      overflow="hidden"
+      p={padding}
     >
-      {emoji && (
-        <Image
-          src={emoji}
-          width={emojiWidth || "50px"}
-          height={emojiHeight || "50px"}
-          padding={"auto"}
-          margin={margin}
-        />
-      )}
+      <img
+        src={emoji}
+        alt="emoji"
+        style={{
+          width: emojiWidth,
+          height: emojiHeight,
+          objectFit: "contain",
+        }}
+      />
     </Box>
   );
 };

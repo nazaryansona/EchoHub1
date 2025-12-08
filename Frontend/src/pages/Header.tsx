@@ -6,13 +6,33 @@ import { IoIosNotifications } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import ProfilePic from "../components/ProfilePic";
+import { useState, useEffect } from "react";
+import { getCurrentUser } from "../api/auth";
+import NotifModal from "@/components/NotifModal";
+import SearchBar from "@/components/SearchBar";
+
 import monkey from "../assets/monkey.png";
-import SearchBar from "../components/SearchBar";
-import NotifModal from "../components/NotifModal";
-import { useState } from "react";
+import dolphin from "../assets/dolphin.png";
+import fox from "../assets/fox.png";
+import koala from "../assets/koala.png";
+import mouse from "../assets/mouse.png";
+import unicorn from "../assets/unicorn.png";
+const emojiImages: Record<string, string> = {
+  monkey,
+  dolphin,
+  fox,
+  koala,
+  mouse,
+  unicorn,
+};
 
 const Header = ({ onSearch }: { onSearch: (value: string) => void }) => {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<{
+    color: string;
+    emoji: string;
+    id: string;
+  } | null>(null);
   const { pathname } = useLocation();
   const hideNavRoutes = ["/feed", "/profile", "/profile/add-post"];
   const hideNav = hideNavRoutes.includes(pathname);
@@ -20,6 +40,12 @@ const Header = ({ onSearch }: { onSearch: (value: string) => void }) => {
   const handleClick = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {
+    getCurrentUser()
+      .then((data) => setUser(data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <>
@@ -38,14 +64,17 @@ const Header = ({ onSearch }: { onSearch: (value: string) => void }) => {
               <FaHome className={style.icon} />
             </Link>
             <Link to="/profile">
-              <ProfilePic
-                color="#269D28"
-                emoji={monkey}
-                width="40px"
-                height="40px"
-                emojiWidth="20px"
-                emojiHeight="20px"
-              />
+              {user && (
+                <ProfilePic
+                  color={user.color}
+                  emoji={emojiImages[user.emoji]}
+                  width="40px"
+                  height="40px"
+                  emojiWidth="30px"
+                  emojiHeight="30px"
+                  padding="10px"
+                />
+              )}
             </Link>
           </div>
         )}

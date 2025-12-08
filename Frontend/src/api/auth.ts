@@ -14,6 +14,11 @@ export const previewUsername = async (emoji: string) => {
   return res.data;
 };
 
+export const getCurrentUser = async () => {
+  const res = await api.get("/auth/me");
+  return res.data;
+};
+
 export const loginUser = async (username: string, password: string) => {
   const res = await api.post("/auth/login", { username, password });
   return res.data;

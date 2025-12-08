@@ -5,7 +5,14 @@ export function usePosts({
   search,
 }: { userId?: string; search?: string } = {}) {
   const [posts, setPosts] = useState<
-    { img?: string; id: number; userId: number; content: string }[]
+    {
+      text: string;
+      image_url: string | undefined;
+      img?: string;
+      id: number;
+      userId: number;
+      content: string;
+    }[]
   >([]);
 
   useEffect(() => {

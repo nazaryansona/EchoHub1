@@ -103,6 +103,26 @@ export const previewUsername = async (req: Request, res: Response) => {
   }
 };
 
+export const getCurrentUser = async (req: Request, res: Response) => {
+  // @ts-ignore
+  const userId: number = req.session?.userId;
+  if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const [rows]: any = await db.query(
+      "SELECT id, username, avatar_color AS color, avatar_emoji AS emoji FROM users WHERE id = ?",
+      [userId]
+    );
+    if (rows.length === 0)
+      return res.status(404).json({ message: "User not found" });
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export const logout = (req: Request, res: Response) => {
   req.session.destroy(() => {
     res.json({ message: "Logged out" });
