@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import style from "../styles/Profile.module.css";
+import api from "../api/apiClient";
 
 interface PreviewFile {
   file: File;
@@ -24,6 +25,7 @@ const CreatePost = () => {
   const location = useLocation();
   const isAddingPost = location.pathname.includes("/profile/add-post");
   const [files, setFiles] = useState<PreviewFile[]>([]);
+  const [text, setText] = useState("");
 
   const handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
@@ -43,6 +45,25 @@ const CreatePost = () => {
 
   const navigate = useNavigate();
 
+  const handleSubmit = async () => {
+    if (!text && files.length === 0) return; // nothing to post
+
+    const formData = new FormData();
+    formData.append("text", text);
+    if (files[0]) formData.append("image", files[0].file); // first file only, change if multiple
+
+    try {
+      await api.post("/posts", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      alert("Post created!");
+      navigate("/profile"); // go back to profile after posting
+    } catch (err) {
+      console.error("Error creating post:", err);
+      alert("Failed to create post");
+    }
+  };
+
   return (
     <>
       <Box className={style.subtleBox}>
@@ -55,7 +76,13 @@ const CreatePost = () => {
           {isAddingPost ? "New Post" : "My Posts"}
         </Text>
       </Box>
-      <Card.Root maxW="sm" className={style.newPostContainer}>
+      <Card.Root
+        maxW="sm"
+        className={style.newPostContainer}
+        maxH="47vh"
+        overflowY="auto"
+        p="4"
+      >
         <Card.Body>
           <Stack gap="4" w="full">
             <Field.Root>
@@ -121,11 +148,17 @@ const CreatePost = () => {
             )}
             <Field.Root>
               <Field.Label color="white">Add text</Field.Label>
-              <Textarea className={style.textarea} />
+              <Textarea
+                className={style.textarea}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
             </Field.Root>
           </Stack>
 
-          <Button className={style.postButton}>Post</Button>
+          <Button className={style.postButton} onClick={handleSubmit}>
+            Post
+          </Button>
         </Card.Body>
       </Card.Root>
     </>

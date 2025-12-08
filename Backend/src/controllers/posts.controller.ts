@@ -57,10 +57,13 @@ export const getMyPosts = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const [rows]: any = await db.query(
-      `SELECT p.id, p.text, p.image_url, p.created_at,
-              (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) AS comments_count,
-              (SELECT COUNT(*) FROM reactions r WHERE r.post_id = p.id) AS reactions_count
+      `SELECT
+          p.id, p.user_id, p.text, p.image_url, p.created_at,
+          u.username, u.avatar_color AS color, u.avatar_emoji AS emoji,
+          (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) AS comments_count,
+          (SELECT COUNT(*) FROM reactions r WHERE r.post_id = p.id) AS reactions_count
        FROM posts p
+       JOIN users u ON u.id = p.user_id
        WHERE p.user_id = ?
        ORDER BY p.created_at DESC`,
       [userId]

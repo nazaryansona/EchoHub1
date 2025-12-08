@@ -45,6 +45,8 @@ const Profile = ({ search }: { search: string }) => {
   }, []);
   console.log(user);
 
+  console.log(posts);
+
   if (!user) return <Text color="white">Loading...</Text>;
 
   return (
@@ -94,10 +96,26 @@ const Profile = ({ search }: { search: string }) => {
                     </Box>
                   </Link>
                 </Box>
-                <Box className={style.postContainer}>
-                  {posts.map((p) => (
-                    <Post key={p.id} text={p.content} img={p.img} id={p.id} />
-                  ))}
+                <Box
+                  className={style.postContainer}
+                  maxH="350px"
+                  overflowY="auto"
+                  pr="2"
+                >
+                  {posts.length > 0 &&
+                    posts.map((p) => (
+                      <Post
+                        key={p.id}
+                        id={p.id}
+                        text={p.text}
+                        img={p.image_url}
+                        date={p.created_at}
+                        commentsNum={p.comments_count}
+                        username={p.username}
+                        userColor={p.color}
+                        userEmoji={p.emoji}
+                      />
+                    ))}
                 </Box>
               </>
             }

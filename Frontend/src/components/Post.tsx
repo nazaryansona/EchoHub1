@@ -1,12 +1,26 @@
 import { Button, Card, HStack, Stack, Text, Image } from "@chakra-ui/react";
 import ProfilePic from "./ProfilePic";
 import monkey from "../assets/monkey.png";
+import dolphin from "../assets/dolphin.png";
+import fox from "../assets/fox.png";
+import koala from "../assets/koala.png";
+import mouse from "../assets/mouse.png";
+import unicorn from "../assets/unicorn.png";
 import ReactionPicker from "./ReactionPicker";
 import { FaRegComment } from "react-icons/fa";
 import CommentSection from "./CommentSection";
 
 import style from "../styles/Post.module.css";
 import { useState } from "react";
+
+const emojiImages: Record<string, string> = {
+  monkey,
+  dolphin,
+  fox,
+  koala,
+  mouse,
+  unicorn,
+};
 
 interface PostProps {
   id: number; // <-- unique identifier for the post
@@ -15,9 +29,20 @@ interface PostProps {
   username?: string;
   date?: string;
   commentsNum?: number;
+  userColor?: string;
+  userEmoji?: string;
 }
 
-const Post = ({ id, img, text, username, date, commentsNum }: PostProps) => {
+const Post = ({
+  id,
+  img,
+  text,
+  username,
+  date,
+  commentsNum,
+  userColor,
+  userEmoji,
+}: PostProps) => {
   const [commentSect, setCommentSect] = useState(false);
 
   const handleClick = () => {
@@ -29,8 +54,8 @@ const Post = ({ id, img, text, username, date, commentsNum }: PostProps) => {
       <Card.Body>
         <HStack mb="6" gap="3">
           <ProfilePic
-            color="#269D28"
-            emoji={monkey}
+            color={userColor || "#269D28"}
+            emoji={emojiImages[userEmoji || "monkey"]}
             width="45px"
             height="45px"
             emojiHeight="27px"
@@ -38,9 +63,12 @@ const Post = ({ id, img, text, username, date, commentsNum }: PostProps) => {
           />
           <Stack gap="0">
             <Text fontWeight="semibold" color="white">
-              {username || "Username"}
+              {username || "Unknown User"}
             </Text>
-            <Text color="white">{date || "Date"}</Text>
+
+            <Text color="white">
+              {date ? new Date(date).toLocaleDateString() : ""}
+            </Text>
           </Stack>
         </HStack>
 

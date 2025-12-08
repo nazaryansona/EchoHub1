@@ -1,47 +1,54 @@
 import { useEffect, useState } from "react";
+import api from "../api/apiClient";
+
+interface PostType {
+  id: number;
+  text: string;
+  image_url?: string | null;
+  created_at: string;
+  comments_count: number;
+  reactions_count: number;
+  username?: string;
+  color?: string;
+  emoji?: string;
+}
 
 export function usePosts({
   userId,
   search,
 }: { userId?: string; search?: string } = {}) {
-  const [posts, setPosts] = useState<
-    {
-      text: string;
-      image_url: string | undefined;
-      img?: string;
-      id: number;
-      userId: number;
-      content: string;
-    }[]
-  >([]);
+  const [posts, setPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
-    // MOCKED DATA
-    const mockPosts = [
-      {
-        id: 1,
-        userId: 1,
-        content: "Hello world!",
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfFSWYexIVAMOL34SWlIN5ol-4RA-gH-7_XA&s",
-      },
-      { id: 2, userId: 2, content: "React is amazing" },
-      { id: 3, userId: 1, content: "Working on my profile page" },
-      { id: 4, userId: 3, content: "Another user's post" },
-    ];
+    const fetchPosts = async () => {
+      try {
+        const res =
+          userId && userId !== "0"
+            ? await api.get("/posts/me")
+            : await api.get("/posts/feed");
 
-    // Filter by userId if provided
-    let filtered = userId
-      ? mockPosts.filter((p) => p.userId.toString() === userId)
-      : mockPosts;
+        let data: PostType[] = res.data;
 
-    // Filter by search term if provided
-    if (search) {
-      filtered = filtered.filter((p) =>
-        p.content.toLowerCase().includes(search.toLowerCase())
-      );
-    }
+        data = data.map((p) => ({
+          ...p,
+          image_url: p.image_url
+            ? `http://localhost:3000${p.image_url}`
+            : undefined,
+        }));
 
-    setPosts(filtered);
+        if (search) {
+          data = data.filter((p) =>
+            p.text?.toLowerCase().includes(search.toLowerCase())
+          );
+        }
+
+        setPosts(data);
+      } catch (err) {
+        console.error("Failed to load posts:", err);
+      }
+    };
+
+    fetchPosts();
   }, [userId, search]);
 
   return { posts };
