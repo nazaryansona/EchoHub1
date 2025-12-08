@@ -2,9 +2,9 @@ import { HStack } from "@chakra-ui/react";
 import Emoji from "./Emoji";
 
 interface EmojiSelectorProps {
-  emojis: string[];
+  emojis: { key: string; src: string }[];
   value: string;
-  onChange: (emoji: string) => void;
+  onChange: (emojiKey: string) => void;
 }
 
 const EmojiSelector = ({ emojis, value, onChange }: EmojiSelectorProps) => {
@@ -12,10 +12,10 @@ const EmojiSelector = ({ emojis, value, onChange }: EmojiSelectorProps) => {
     <HStack spacing="10px">
       {emojis.map((e) => (
         <Emoji
-          key={e}
-          src={e}
-          selected={value === e}
-          onClick={() => onChange(e)}
+          key={e.key}
+          src={e.src}
+          selected={value === e.key}
+          onClick={() => onChange(e.key)}
         />
       ))}
     </HStack>

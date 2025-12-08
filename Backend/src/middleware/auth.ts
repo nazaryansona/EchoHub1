@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from "express";
-
-export function requireLogin(req: Request, res: Response, next: NextFunction) {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+// middleware/auth.ts
+export const requireLogin = (req, res, next) => {
+  if (req.session?.userId) {
+    next();
+  } else {
+    res.status(401).json({ error: "Unauthorized" });
   }
-  next();
-}
+};

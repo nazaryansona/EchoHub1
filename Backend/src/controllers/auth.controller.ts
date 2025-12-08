@@ -71,7 +71,7 @@ export const login = async (req: Request, res: Response) => {
 
     const user = rows[0];
 
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password_hash);
 
     if (!match) {
       return res.status(400).json({ message: "Invalid password" });
@@ -82,6 +82,24 @@ export const login = async (req: Request, res: Response) => {
     res.json({ message: "Logged in" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const previewUsername = async (req: Request, res: Response) => {
+  try {
+    const { emoji } = req.body;
+
+    if (!emoji) {
+      return res.status(400).json({ message: "Emoji is required" });
+    }
+
+    const base = emoji.replace(/^.*\/([^\/]+)\..*/, "$1");
+    const username = await generateUsername(base);
+
+    return res.json({ username });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
